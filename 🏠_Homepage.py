@@ -4,7 +4,7 @@ from core.app_manager import set_page_settings
 import requests
 
 def test():
-    url = "https://adventofcode.com/"
+    url = "https://adventofcode.com/2025/day/1/input"
     response = requests.get(url)
     if response.status_code == 200:
         st.write(response.text)
