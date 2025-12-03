@@ -31,7 +31,7 @@ def show_day_ui(title: str, day_module) -> None:
 
         # Solver Tab
         with tab1:
-            cols = st.columns([0.3, 0.7])
+            cols = st.columns([0.3, 0.7], gap="medium")
 
             # Text area + Reset button
             with cols[0]:
@@ -43,7 +43,7 @@ def show_day_ui(title: str, day_module) -> None:
                 # Initialize session state if not exists
                 input_data = st.session_state.get(unique_page_key, "")
 
-                subcols = st.columns([0.1, 0.1, 0.7, 0.1])
+                subcols = st.columns([0.1, 0.1, 0.6, 0.1])
                 with subcols[0]:
                     if st.button(label="", 
                                 icon="🧪", 
@@ -145,4 +145,4 @@ def show_code(day_module):
             code = f.read()
         st.code(code, language="python")
     except FileNotFoundError:
-        st.error(f"Code not available.")
+        st.error(f"Code not available.")    
