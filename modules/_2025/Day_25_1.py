@@ -1,7 +1,4 @@
-from typing import Tuple
-
-
-def main(inputs: str) -> Tuple[int, int]:
+def main(inputs: str) -> tuple[int, int]:
     # Current position on the circular track [0, 99].
     pos: int = 50
 
@@ -31,3 +28,17 @@ def main(inputs: str) -> Tuple[int, int]:
             sol2 += next_pos_abs // 100 - pos // 100
 
     return sol1, sol2
+
+def sample():
+    return """\
+L68
+L30
+R48
+L5
+R60
+L55
+L1
+L99
+R14
+L82
+"""

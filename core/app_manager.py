@@ -18,37 +18,79 @@ def set_page_settings(title, icon) -> None:
     )
     st.title(icon + title)
 
-def show_day_ui(title:str,day_module)->None:
-    # Recover the title
-    # Create tabs for "Solver" and "Code"
+
+import streamlit as st
+
+def show_day_ui(title: str, day_module) -> None:
+    # Tabs
     if day_module == COMMUN_MODULES:
         st.write("📜Code")
         show_code(day_module)
     else:
         tab1, tab2 = st.tabs(["🧩Solver", "📜Code"])
-    
-    # Solver Tab
+
+        # Solver Tab
         with tab1:
             cols = st.columns([0.3, 0.7])
-            # Text area for pasting input data
+
+            # Text area + Reset button
             with cols[0]:
-                st.subheader("Inputs",help="Paste your input in the text box")
-                session_state_key = f"input_data_{title.replace(' ', '_')}"
-                default_value = st.session_state.get(session_state_key, "")
+                #st.subheader("Inputs", help="Paste your input in the text box")
+
+                # Unique keys for session state
+                unique_page_key = f"input_data_{title.replace(' ', '_')}"
+                
+                # Initialize session state if not exists
+                input_data = st.session_state.get(unique_page_key, "")
+
+                subcols = st.columns([0.1, 0.1, 0.7, 0.1])
+                with subcols[0]:
+                    if st.button(label="", 
+                                icon="🧪", 
+                                type="tertiary",
+                                help="Load sample inputs",
+                                key= unique_page_key + "_sample",
+                                ):
+                        st.session_state[unique_page_key] = day_module.sample()
+                        st.rerun()
+                if input_data:
+
+                    # Run button
+                    with subcols[1]:
+                        if st.button(label="", 
+                                     icon="🚀",
+                                     type="tertiary",
+                                     help="Run your puzzle solution",
+                                     key= unique_page_key + "_run",
+                                     ):
+                            with cols[1]:
+                                run_code(input_data, day_module)
+
+                    # Reset button
+                    with subcols[3]:
+                        if st.button(label="", 
+                                    icon="🔄", 
+                                    type="tertiary",
+                                    help="Reset your inputs",
+                                    key= unique_page_key + "_reset",
+                                    ):
+                            st.session_state[unique_page_key] = ""
+                            st.rerun()
+                # Text area
                 input_data = st.text_area(
-                    label = "Paste your input in the text box",
+                    label="Paste your input in the text box",
                     placeholder="Paste your input data here",
-                    value=default_value,
+                    value=st.session_state.get(unique_page_key, ""),
                     height=500,
                     label_visibility="collapsed",
-                    )
-                st.session_state[session_state_key] = input_data
-                if input_data and st.button("Run",type="primary"):
-                    with cols[1]:
-                        run_code(input_data, day_module)
-        # View Code Tab
+                    key=unique_page_key
+                )
+
+
+        # Code Tab
         with tab2:
             show_code(day_module)
+
 
 
 def run_code(input_data, day_module):

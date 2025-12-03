@@ -6,8 +6,6 @@ sidebar using custom CSS injected through `st.sidebar.markdown`.
 """
 
 import streamlit as st
-from typing import Dict
-from pathlib import Path
 
 def animate_title(title, icon) -> None:
     """
