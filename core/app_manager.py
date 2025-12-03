@@ -35,11 +35,11 @@ def show_day_ui(title: str, day_module) -> None:
 
             # Text area + Reset button
             with cols[0]:
-                #st.subheader("Inputs", help="Paste your input in the text box")
 
                 # Unique keys for session state
                 unique_page_key = f"input_data_{title.replace(' ', '_')}"
-                
+                unique_sample_key = unique_page_key + "_sample"
+                unique_results_key = unique_page_key + "_results"
                 # Initialize session state if not exists
                 input_data = st.session_state.get(unique_page_key, "")
 
@@ -49,12 +49,12 @@ def show_day_ui(title: str, day_module) -> None:
                                 icon="🧪", 
                                 type="tertiary",
                                 help="Load sample inputs",
-                                key= unique_page_key + "_sample",
+                                key= unique_page_key + unique_sample_key,
                                 ):
                         st.session_state[unique_page_key] = day_module.sample()
+                        st.session_state[unique_results_key] = run_code(day_module.sample(), day_module)
                         st.rerun()
                 if input_data:
-
                     # Run button
                     with subcols[1]:
                         if st.button(label="", 
@@ -64,8 +64,8 @@ def show_day_ui(title: str, day_module) -> None:
                                      key= unique_page_key + "_run",
                                      ):
                             with cols[1]:
-                                run_code(input_data, day_module)
-
+                                st.session_state[unique_results_key] = run_code(input_data, day_module)                    
+                                
                     # Reset button
                     with subcols[3]:
                         if st.button(label="", 
@@ -75,6 +75,7 @@ def show_day_ui(title: str, day_module) -> None:
                                     key= unique_page_key + "_reset",
                                     ):
                             st.session_state[unique_page_key] = ""
+                            st.session_state[unique_results_key] = None
                             st.rerun()
                 # Text area
                 input_data = st.text_area(
@@ -85,28 +86,43 @@ def show_day_ui(title: str, day_module) -> None:
                     label_visibility="collapsed",
                     key=unique_page_key
                 )
+            with cols[1]:
+                if st.session_state.get(unique_results_key, None):
+                    show_results(st.session_state.get(unique_results_key))
 
 
         # Code Tab
         with tab2:
             show_code(day_module)
 
+def show_results(results:tuple[str])->None:
+        if results:
+            sol1, sol2, elapsed_time = results
+            st.subheader("✨Results")
+            st.success(f"""\
+                        **⭐ {sol1}**\n
+                        **⭐⭐ {sol2}**\n
+                        **⌛ {elapsed_time} ms**\
+                        """,)
+        else:
+            st.error(f"""\
+                     An error occurred.\n
+                     Please check you have correctly paste your input data\
+                     """)
+        
 
 
-def run_code(input_data, day_module):
+def run_code(input_data, day_module)->bool:
     with st.spinner("Running your puzzle solution..."):
         try:
             start = time()
             sol = day_module.main(input_data)
             elapsed_time = int((time() - start) * 1000)
-            st.subheader("Results")
-            st.success(f"""
-                        **⭐ {sol[0]}**\n
-                        **⭐⭐ {sol[1]}**\n
-                        **⌛ {elapsed_time} ms**\n
-                        """,)
+            return *sol, elapsed_time
         except Exception as e:
-            st.error(f"An error occurred: {e}")
+            return None
+
+    
 
 def init_day_page(selected_day:str, module_day):
     full_title = selected_day.split(" - ")[1]
@@ -129,4 +145,4 @@ def show_code(day_module):
             code = f.read()
         st.code(code, language="python")
     except FileNotFoundError:
-        st.error(f"Code not available.")    
+        st.error(f"Code not available.")
