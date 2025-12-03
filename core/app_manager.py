@@ -98,7 +98,7 @@ def show_day_ui(title: str, day_module) -> None:
 def show_results(results:tuple[str])->None:
         if results:
             sol1, sol2, elapsed_time = results
-            st.subheader("✨Results")
+            st.subheader("Results")
             st.success(f"""\
                         **⭐ {sol1}**\n
                         **⭐⭐ {sol2}**\n
@@ -146,6 +146,7 @@ def show_code(day_module):
         st.code(code, language="python")
     except FileNotFoundError:
         st.error(f"Code not available.")    
+
 
 
 
