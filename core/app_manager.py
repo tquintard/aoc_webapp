@@ -2,14 +2,7 @@ import streamlit as st
 from time import time
 import os
 import inspect
-from modules import Day_1, Day_2
-import modules.common as common
-
-DAYS: dict={
-    "Day 1 - 🧱 Secret Entrance": Day_1,
-    "Day 2 - 🎁 Gift Shop": Day_2,
-    "Common - 📚 Common Modules": common
-}
+from config import DAYS, COMMUN_MODULES
 
 def set_page_settings(title, icon) -> None:
     """
@@ -28,7 +21,7 @@ def set_page_settings(title, icon) -> None:
 def show_day_ui(title:str,day_module)->None:
     # Recover the title
     # Create tabs for "Solver" and "Code"
-    if day_module == common:
+    if day_module == COMMUN_MODULES:
         st.write("📜Code")
         show_code(day_module)
     else:
@@ -44,7 +37,7 @@ def show_day_ui(title:str,day_module)->None:
                 default_value = st.session_state.get(session_state_key, "")
                 input_data = st.text_area(
                     label = "Paste your input in the text box",
-                    placeholder="Enter your input data...",
+                    placeholder="Paste your input data here",
                     value=default_value,
                     height=500,
                     label_visibility="collapsed",
@@ -80,10 +73,10 @@ def init_day_page(selected_day:str, module_day):
     set_page_settings(title=title, icon=icon)
     show_day_ui(title=title, day_module=module_day)
 
-def select_day():
+def select_day(year):
     # Display the content of the corresponding Python module
-    selected_day = st.sidebar.selectbox("Pick a day", options=DAYS.keys())
-    return selected_day, DAYS[selected_day]
+    selected_day = st.sidebar.selectbox("Pick a day", options=DAYS[year].keys())
+    return selected_day, DAYS[year][selected_day]
 
 def show_code(day_module):
     try:
