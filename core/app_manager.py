@@ -43,7 +43,7 @@ def show_day_ui(title: str, day_module) -> None:
                 # Initialize session state if not exists
                 input_data = st.session_state.get(unique_page_key, "")
 
-                subcols = st.columns([0.1, 0.1, 0.5, 0.3])
+                subcols = st.columns([0.1, 0.1, 0.65, 0.1, 0.5])
                 with subcols[0]:
                     if st.button(label="", 
                                 icon="🧪", 
@@ -146,5 +146,6 @@ def show_code(day_module):
         st.code(code, language="python")
     except FileNotFoundError:
         st.error(f"Code not available.")    
+
 
 
