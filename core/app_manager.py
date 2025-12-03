@@ -31,7 +31,7 @@ def show_day_ui(title: str, day_module) -> None:
 
         # Solver Tab
         with tab1:
-            cols = st.columns([0.3, 0.7], gap="medium")
+            cols = st.columns([0.3, 0.7])
 
             # Text area + Reset button
             with cols[0]:
@@ -146,6 +146,7 @@ def show_code(day_module):
         st.code(code, language="python")
     except FileNotFoundError:
         st.error(f"Code not available.")    
+
 
 
 
