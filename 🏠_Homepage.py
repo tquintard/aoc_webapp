@@ -9,7 +9,7 @@ def test():
     if response.status_code == 200:
         st.write(response.text)
     else:
-        st.error(f"{e}")
+        st.error("error")
 
 # Internet Browser tab name
 set_page_settings(title="Advent of Code Solver", icon="🎄")
