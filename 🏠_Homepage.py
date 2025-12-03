@@ -3,7 +3,13 @@ from PIL import Image
 from core.app_manager import set_page_settings
 import requests
 
-
+def test():
+    url = "https://adventofcode.com/"
+    response = requests.get(url)
+    if response.status_code == 200:
+        st.write(response.text)
+    else:
+        st.error(f"{e}")
 
 # Internet Browser tab name
 set_page_settings(title="Advent of Code Solver", icon="🎄")
@@ -18,10 +24,3 @@ st.write(
 st.write("Select a puzzle from the menu to begin.")
 
 
-def test():
-    url = "https://adventofcode.com/"
-    response = requests.get(url)
-    if response.status_code == 200:
-        st.write(response.text)
-    else:
-        st.error(f"{e}")
