@@ -6,6 +6,8 @@ sidebar using custom CSS injected through `st.sidebar.markdown`.
 """
 
 import streamlit as st
+from pathlib import Path
+from config import MD_DIR, MKD_FILES
 
 def animate_title(title, icon) -> None:
     """
@@ -56,3 +58,30 @@ def animate_title(title, icon) -> None:
         """,
         unsafe_allow_html=True,
     )
+
+
+def render_markdown_file(filename: str) -> None:
+    """
+    Load and render a markdown file inside Streamlit.
+
+    Args:
+        filename (str): Name of the markdown file (stem only).
+
+    Notes:
+        HTML is allowed in rendering.
+    """
+
+    # Ensure markdown key exists
+    if filename not in MKD_FILES:
+        st.write(filename, MKD_FILES)
+        st.error(f"❌ Unknown markdown key: {filename}")
+        return
+
+    path = MKD_FILES[filename]
+
+    # Load markdown content
+    with open(path, "r", encoding="utf-8") as file:
+        content = file.read()
+
+    # Render HTML-enabled Markdown
+    st.markdown(content, unsafe_allow_html=True)
