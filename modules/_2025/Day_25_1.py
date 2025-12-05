@@ -29,8 +29,7 @@ def main(inputs: str) -> tuple[int, int]:
 
     return sol1, sol2
 
-def sample():
-    return """\
+SAMPLE = """\
 L68
 L30
 R48
@@ -40,5 +39,6 @@ L55
 L1
 L99
 R14
-L82
+L82\
 """
+
