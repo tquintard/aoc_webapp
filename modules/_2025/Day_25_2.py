@@ -1,13 +1,3 @@
-"""
-Utilities to compute special ID sums based on repeated numeric chunks.
-
-The module parses ranges expressed as "start-end" and, for each range,
-identifies IDs that can be represented as repeated identical chunks of
-digits. Two different sums are produced:
-- sol1: sum of IDs made of exactly two identical chunks.
-- sol2: sum of all such "invalid" IDs found in each range.
-"""
-
 import re
 import streamlit as st  # Unused import kept to avoid changing core structure.
 
@@ -15,29 +5,14 @@ IDS: re.Pattern[str] = re.compile(r"(?:(?P<first_id>\d+)-(?P<last_id>\d+)),?")
 
 
 def main(inputs: str) -> tuple[int, int]:
-    """
-    Compute two sums of special IDs for all ranges described in the input.
-
-    The input is expected to contain one or more ranges in the form
-    "start-end", separated by commas. For each range, the function searches
-    for IDs that can be written as the repetition of the same numeric chunk
-    a given number of times (the base). Two sums are returned:
-
-    - sol1: sum of IDs that are made of exactly two identical chunks.
-    - sol2: sum of all such repeated-chunk IDs found in all ranges.
-
-    Args:
-        inputs: Comma-separated ranges in the "start-end" format, for example
-            "11-22,95-115".
-
-    Returns:
-        A tuple (sol1, sol2) where:
-            - sol1 is the sum of IDs with exactly two identical chunks.
-            - sol2 is the sum of all repeated-chunk IDs.
-    """
-    sol1 = sol2 = 0
+    # Accumulators for the parts' solution.
+    sol1: int = 0
+    sol2: int = 0
+    
+    # Find all ID ranges in the input.
     matches = re.finditer(IDS, inputs)
 
+    # For each range, try all possible invalid IDs.
     for match in matches:
         first_id_str, last_id_str = match.group("first_id"), match.group("last_id")
         len_last_id = len(last_id_str)
@@ -110,11 +85,6 @@ def refine_boundaries(
 ) -> tuple[int, int]:
     """
     Normalize and refine the chunk boundaries used to generate candidate IDs.
-
-    Given optional minimum and maximum chunk values, this function computes
-    a valid integer interval [r_min, r_max) that will be used to generate
-    candidate chunks. The interval is inferred from the number of digits in
-    the last ID and the base.
 
     Args:
         r_min: Minimum chunk value or None if unspecified.
