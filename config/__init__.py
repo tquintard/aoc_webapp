@@ -1,5 +1,5 @@
 from modules._2024 import Day_24_1, Day_24_2, Day_24_3, Day_24_4, Day_24_5, Day_24_6, Day_24_7, Day_24_8, Day_24_9, Day_24_10, Day_24_11
-from modules._2025 import Day_25_1, Day_25_2, Day_25_3
+from modules._2025 import Day_25_1, Day_25_2, Day_25_3, Day_25_4
 import modules.common as common
 from pathlib import Path
 
@@ -39,5 +39,6 @@ DAYS: dict={
         "01 - 🧱 Secret Entrance": Day_25_1,
         "02 - 🎁 Gift Shop": Day_25_2,
         "03 - 🛎️ Lobby": Day_25_3,
+        "04 - 🖨️ Printing Department": Day_25_4,
     },
 }
