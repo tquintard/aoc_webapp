@@ -7,10 +7,14 @@ FULL_LOOK_DIR = [(1, 0), (1, 1), (0, 1), (-1, 1),
 
 
 def create_grid(inputs: list):
-    grid = list()
-    for line in inputs:
-        grid.append(list(line))
-    return grid, len(grid), len(grid[0])
+    grid = dict()
+    lines = inputs.splitlines()
+    dim_y = len(lines)
+    for y, line in enumerate(lines):
+        dim_x = len(line)
+        for x, col in enumerate(line):  
+            grid[(x, y)] = col
+    return grid, dim_x, dim_y
 
 
 def pos_in_grid(x: int, y: int, nb_col: int, nb_row: int) -> bool:
@@ -27,3 +31,6 @@ def next_direction(current_dir: tuple, directions: list[tuple]) -> tuple:
 
 def next_position(pos: tuple[int, int], dx_dy: tuple[int, int]) -> tuple[int, int]:
     return map(sum, zip(pos, dx_dy))
+
+def transpose(grid):
+    return [*zip(*grid)]
